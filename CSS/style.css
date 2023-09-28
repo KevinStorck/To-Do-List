@@ -1,0 +1,51 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    background-color: rgba(224, 255, 255, 0.76);
+}
+
+#todosection {
+    margin-top: 2vh;
+}
+
+#todolist {
+    background-color: rgba(240, 128, 128, 0.678);
+    position: relative;
+}
+
+#todolist li {
+    padding: 6px;
+    position: relative;
+    cursor: pointer;
+    list-style-type: none;
+    transition: 0.1s;
+}
+
+#todolist li:hover {
+    background-color: rgba(165, 41, 41, 0.336);
+}
+
+#todolist li.completed {
+    background-color: rgba(90, 0, 0, 0.384);
+    color: white;
+    text-decoration: line-through;
+}
+
+#todolist li.completed::before {
+    content: '';
+    position: absolute;
+    left: 12px;
+    top: 0px;
+    border-color: black;
+    border-style: solid;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+    height: 20px;
+    width: 10px;
+}
