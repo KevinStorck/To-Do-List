@@ -4,48 +4,62 @@
     padding: 0;
 }
 
-body {
+.container {
     display: flex;
     justify-content: center;
-    background-color: rgba(224, 255, 255, 0.76);
+    gap: 5px;
 }
 
-#todosection {
-    margin-top: 2vh;
+h3 {
+    text-align: center;
+    font-weight: bold;
+    text-decoration: underline;
 }
 
-#todolist {
-    background-color: rgba(240, 128, 128, 0.678);
-    position: relative;
+.welcome-header {
+    font-size: 300%;
+    margin-bottom: 50px;
 }
 
-#todolist li {
-    padding: 6px;
-    position: relative;
-    cursor: pointer;
-    list-style-type: none;
-    transition: 0.1s;
+#todo-container {
+    margin-top: 30px;
+    display: flex;
+    /* flex-direction: column; */
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
 }
 
-#todolist li:hover {
-    background-color: rgba(165, 41, 41, 0.336);
+.todo-item {
+    min-width: 150px;
+    max-width: 300px;
+    max-height: 150px;
+    min-height: 150px;
+    /* border:1px solid black; */
+    box-shadow: 0px 0px 5px rgb(79, 78, 78);
+    border-radius: 5px;
+    padding: 5px 10px;
 }
 
-#todolist li.completed {
-    background-color: rgba(90, 0, 0, 0.384);
-    color: white;
-    text-decoration: line-through;
+.todo-item h3 {
+    margin-bottom: 10px;
 }
 
-#todolist li.completed::before {
-    content: '';
-    position: absolute;
-    left: 12px;
-    top: 0px;
-    border-color: black;
-    border-style: solid;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-    height: 20px;
-    width: 10px;
+.todo-item:hover {
+    box-shadow: 0px 0px 5px rgb(179, 56, 56);
+    /* background-color: rgba(179, 56, 56, 0.055); */
+}
+
+.removeButton,
+.klarButton {
+    display: none;
+}
+
+.todo-item:hover .removeButton,
+.todo-item:hover .klarButton {
+    display: block;
+}
+
+.klar {
+    background-color: lightcoral;
 }
