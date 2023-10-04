@@ -19,6 +19,10 @@ function saveTodoItem() {
     else todoList.push(todo)
 
     localStorage.setItem('todoList', JSON.stringify(todoList))
+    
+    document.getElementById('todo-header').value = '';
+    document.getElementById('todo-body').value = '';
+
     showTodos();
 }
 
@@ -27,12 +31,6 @@ function showTodos() {
     let container = document.getElementById("todo-container");
     container.innerHTML = ("");
     for (let i = 0; i < todoList.length; i++) {
-        // if ((document.getElementById(`header-${(todoList.length)-1}`)) === false) {
-        // }
-        // if ((document.getElementById(`header-${i}`))) {
-        //     console.log((document.getElementById(`header-${i}`)))
-        //     continue;
-        // } 
 
         let newTodo = document.createElement('div'); // ny div
         newTodo.setAttribute("class", "todo-item"); // ger nya div en class
@@ -65,17 +63,15 @@ function showTodos() {
     }
 }
 
-function removeTodo(todoListObject) {
-    let removeObject = JSON.parse(todoListObject);
+function removeTodo(todoIndex) {
     let todoList = JSON.parse(localStorage.getItem('todoList'));
-    todoList.splice(removeObject, 1);
+    todoList.splice(todoIndex, 1);
     localStorage.setItem('todoList', JSON.stringify(todoList));
     showTodos();
 }
 
-function klar(todoListObject) {
-    let klarObject = JSON.parse(todoListObject);
-    let object = document.getElementById(`todo-item-${klarObject}`);
+function klar(todoIndex) {
+    let object = document.getElementById(`todo-item-${todoIndex}`);
     let objectClass = object.getAttribute("class");
     if (objectClass === "todo-item klar") {
         object.setAttribute("class", "todo-item");
