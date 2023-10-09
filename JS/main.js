@@ -6,7 +6,8 @@ function saveTodoItem() {
     let todoCategory = document.getElementById('todo-category').value;
     let todoDate = (new Date());
 
-    let id = JSON.parse(localStorage.getItem('todoList')).length;
+    let storedTodos = JSON.parse(localStorage.getItem('todoList'));
+    let id = storedTodos ? JSON.parse(localStorage.getItem('todoList')).length : 0;
 
     let todo = {
         header:todoHeader,
@@ -18,7 +19,6 @@ function saveTodoItem() {
     }
 
     let todoList = [];
-    let storedTodos = JSON.parse(localStorage.getItem('todoList'));
 
     if(storedTodos) {
         todoList = storedTodos;
@@ -39,6 +39,7 @@ function showTodos() {
     let todoList = JSON.parse(localStorage.getItem('todoList'));
     let container = document.getElementById("todo-container");
     container.innerHTML = ("");
+    if(!todoList) return ;
     for (let i = 0; i < todoList.length; i++) {
 
         let newTodo = document.createElement('div'); // ny div
