@@ -3,10 +3,18 @@ onload = () => showTodos();
 function saveTodoItem() {
     let todoBody = document.getElementById('todo-body').value;
     let todoHeader = document.getElementById('todo-header').value;
+    let todoCategory = document.getElementById('todo-category').value;
+    let todoDate = (new Date());
+
+    let id = JSON.parse(localStorage.getItem('todoList')).length;
 
     let todo = {
         header:todoHeader,
-        body:todoBody
+        body:todoBody,
+        category:todoCategory,
+        date:todoDate,
+        id:id,
+        klar:false
     }
 
     let todoList = [];
@@ -24,6 +32,7 @@ function saveTodoItem() {
     document.getElementById('todo-body').value = '';
 
     showTodos();
+    klarRefresh();
 }
 
 function showTodos() {
@@ -61,19 +70,46 @@ function showTodos() {
         newTodo.appendChild(removeButton);
         newTodo.appendChild(klarButton);
     }
+    klarRefresh();
 }
 
 function removeTodo(todoIndex) {
     let todoList = JSON.parse(localStorage.getItem('todoList'));
     todoList.splice(todoIndex, 1);
     localStorage.setItem('todoList', JSON.stringify(todoList));
+    rearrangeTodos();
     showTodos();
+    klarRefresh();
+}
+
+function rearrangeTodos() {
+    let todoList = JSON.parse(localStorage.getItem('todoList'));
+    if (todoList.length > 0) {
+        for (let element in todoList) {
+            todoList[element].id = element;
+        }
+        localStorage.setItem('todoList', JSON.stringify(todoList))
+        }
 }
 
 function klar(todoIndex) {
-    let object = document.getElementById(`todo-item-${todoIndex}`);
-    let objectClass = object.getAttribute("class");
-    if (objectClass === "todo-item klar") {
-        object.setAttribute("class", "todo-item");
-    } else object.setAttribute("class", "todo-item klar");
+    let todoList = JSON.parse(localStorage.getItem('todoList'));
+    if (!todoList[todoIndex].klar) todoList[todoIndex].klar = true;
+    else todoList[todoIndex].klar = false;
+    localStorage.setItem('todoList', JSON.stringify(todoList))
+    klarRefresh();
+}
+
+function klarRefresh() {
+    let todoList = JSON.parse(localStorage.getItem('todoList'));
+    for (let element in todoList) {
+        if (todoList[element].klar) {
+            let object = document.getElementById(`todo-item-${element}`);
+            object.setAttribute("class", "todo-item klar");
+        } else {
+            let object = document.getElementById(`todo-item-${element}`);
+            object.setAttribute("class", "todo-item");
+        }
+    }
+    localStorage.setItem('todoList', JSON.stringify(todoList));
 }

@@ -7,7 +7,26 @@
 .container {
     display: flex;
     justify-content: center;
-    gap: 5px;
+    flex-wrap: wrap;
+    gap: 5px 1%;
+    width: 80%;
+    margin: 0 auto;
+}
+
+#todo-header {
+    width: 49.5%;
+}
+
+#todo-category {
+    width: 49.5%;
+}
+
+#todo-body {
+    box-sizing: content-box;
+    width: 100%;
+    /* margin-left: -6px;
+    margin-right: -6px; */
+    height: 50px;
 }
 
 h3 {
