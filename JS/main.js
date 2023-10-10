@@ -14,7 +14,8 @@ function saveTodoItem() {
         category:todoCategory,
         date:todoDate,
         id:id,
-        klar:false
+        klar:false,
+        heart:false
     }
 
     let todoList = [];
@@ -50,6 +51,10 @@ function showTodos() {
         // todoHeader.setAttribute("id", `header-${i}`);
         todoHeader.innerHTML = todoList[i].header; // ge innehåll till h3
 
+        let todoDate = document.createElement('time');
+        todoDate.innerHTML = `Created: ${todoList[i].date}`;
+
+
         let todoBody = document.createElement('p'); // skapa en P tag
         todoBody.innerHTML = todoList[i].body; // ge innehåll till p tag
 
@@ -64,8 +69,18 @@ function showTodos() {
         klarButton.setAttribute("id", `klarButton-${i}`);
         klarButton.setAttribute("onclick", `klar(${i})`);
         klarButton.innerHTML = 'Klar';
+
+        let heartIMG = document.createElement('a');
+        heartIMG.setAttribute('class', 'heart');
+        heartIMG.setAttribute("id", `heart`);
+        heartIMG.setAttribute("onclick", `heart(${i})`);
+        heartIMG.style.width = "50px";
+        heartIMG.style.height = "50px";
+
         
         newTodo.appendChild(todoHeader);
+        newTodo.appendChild(heartIMG);
+        newTodo.appendChild(todoDate);
         newTodo.appendChild(todoBody);
         newTodo.appendChild(removeButton);
         newTodo.appendChild(klarButton);
@@ -100,16 +115,27 @@ function klar(todoIndex) {
     klarRefresh();
 }
 
+function heart(todoIndex) {
+    let todoList = JSON.parse(localStorage.getItem('todoList'));
+    if (!todoList[todoIndex].heart) todoList[todoIndex].heart = true;
+    else todoList[todoIndex].heart = false;
+    localStorage.setItem('todoList', JSON.stringify(todoList))
+    klarRefresh();
+}
+
+
 function klarRefresh() {
     let todoList = JSON.parse(localStorage.getItem('todoList'));
-    for (let element in todoList) {
-        if (todoList[element].klar) {
-            let object = document.getElementById(`todo-item-${element}`);
-            object.setAttribute("class", "todo-item klar");
-        } else {
-            let object = document.getElementById(`todo-item-${element}`);
-            object.setAttribute("class", "todo-item");
-        }
+    let todoDives = document.querySelectorAll('#todo-container div');
+    let todoIMG = document.querySelectorAll('#todo-container a');
+
+    for (let i = 0; i < todoDives.length; i++) {
+        if (todoList[i].klar) {
+            todoDives[i].style.backgroundColor = "lightcoral";
+        } else todoDives[i].style.backgroundColor = "white";
+        if (todoList[i].heart) {
+            todoIMG[i].style.backgroundImage = "url('./Pictures/Heart.png')";
+        } else todoIMG[i].style.backgroundImage = "url('./Pictures/HeartRed.png')";
     }
     localStorage.setItem('todoList', JSON.stringify(todoList));
 }
