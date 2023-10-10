@@ -142,6 +142,11 @@ p, h1, h2, h3, h4, h5 {
     50% { transform: translateY(-5px); }  
 }
 
+@keyframes blink {
+    from { border-right: .1em solid;}
+    to { border-right: none;}
+}
+
 /* Animation för hero-texten */ 
 @keyframes typing {
     0% { width: 0; }         
@@ -152,18 +157,20 @@ p, h1, h2, h3, h4, h5 {
     20% { width: 6ch; }           
     23% { width: 9ch; }           
     25% { width: 16ch; }           
-    30%, 100% { 
+    30% { width: 19ch; }
+    100% { 
         width: 19ch; 
         border-right: none;
     }    
 }
 
+
 .welcome-header {
-    border-right: .1em solid;     
+    border-right: .1em solid;
     width: 6ch;                   
     white-space: nowrap;          
     overflow: hidden;             
-    animation: typing 15s forwards;
+    animation: typing 15s forwards, blink 1s 5s 5;
 }
 
 .welcome-header::before {
