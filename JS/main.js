@@ -75,8 +75,8 @@ function showTodos() {
         heartIMG.setAttribute('class', 'heart');
         heartIMG.setAttribute("id", `heart`);
         heartIMG.setAttribute("onclick", `heart(${i})`);
-        heartIMG.style.width = "50px";
-        heartIMG.style.height = "50px";
+        heartIMG.style.width = "18px";
+        heartIMG.style.height = "18px";
 
         
         newTodo.appendChild(todoHeader);
