@@ -15,7 +15,7 @@ function saveTodoItem() {
         category:todoCategory,
         date:todoDate,
         id:id,
-        klar:false,
+        done:false,
         heart:false
     }
 
@@ -33,7 +33,7 @@ function saveTodoItem() {
     document.getElementById('todo-body').value = '';
 
     showTodos();
-    klarRefresh();
+    doneRefresh();
 }
 
 function showTodos() {
@@ -48,6 +48,10 @@ function showTodos() {
         newTodo.setAttribute("id", `todo-item-${i}`); // ger nya div ett id
         (document.getElementById('todo-container')).appendChild(newTodo); // lägger till nya div i vår container
 
+        // newTodo.addEventListener("click", function() {
+        // done(i);
+        // })
+
         let todoHeader = document.createElement('h3'); // skapa h3
         // todoHeader.setAttribute("id", `header-${i}`);
         todoHeader.innerHTML = todoList[i].header; // ge innehåll till h3
@@ -59,46 +63,52 @@ function showTodos() {
         let todoBody = document.createElement('p'); // skapa en P tag
         todoBody.innerHTML = todoList[i].body; // ge innehåll till p tag
 
-        let removeButton = document.createElement('button');
+        let removeButton = document.createElement('img');
         removeButton.setAttribute("class", `removeButton`);
         removeButton.setAttribute("id", `removeButton-${i}`);
         removeButton.setAttribute("onclick", `removeTodo(${i})`);
-        removeButton.innerHTML = 'Remove ToDo';
+        removeButton.setAttribute("src", "./assets/images/bin.png");
+
+        let binLid = document.createElement('a');
+        binLid.setAttribute("class", "binLid");
+        binLid.setAttribute("id", `binLid-${i}`);
+        binLid.setAttribute("onclick", `removeTodo(${i})`);
         
-        let klarButton = document.createElement('button');
-        klarButton.setAttribute("class", `klarButton`);
-        klarButton.setAttribute("id", `klarButton-${i}`);
-        klarButton.setAttribute("onclick", `klar(${i})`);
-        klarButton.innerHTML = 'Klar';
+/*         let doneButton = document.createElement('button');
+        doneButton.setAttribute("class", `doneButton`);
+        doneButton.setAttribute("id", `doneButton-${i}`);
+        doneButton.setAttribute("onclick", `done(${i})`);
+        doneButton.innerHTML = 'Done'; */
 
         let heartIMG = document.createElement('a');
         heartIMG.setAttribute('class', 'heart');
-        heartIMG.setAttribute("id", `heart`);
+        heartIMG.setAttribute("id", `heart-${i}`);
         heartIMG.setAttribute("onclick", `heart(${i})`);
         heartIMG.style.width = "18px";
         heartIMG.style.height = "18px";
-
         
         newTodo.appendChild(todoHeader);
         newTodo.appendChild(heartIMG);
         newTodo.appendChild(todoDate);
         newTodo.appendChild(todoBody);
         newTodo.appendChild(removeButton);
-        newTodo.appendChild(klarButton);
+        newTodo.appendChild(binLid);
+        // newTodo.appendChild(doneButton);
     }
-    klarRefresh();
+    doneRefresh();
 }
 
 function removeTodo(todoIndex) {
     let todoList = JSON.parse(localStorage.getItem('todoList'));
-    todoList.splice(todoIndex, 1);
+    let todoItem = document.getElementById(`todo-item-${todoIndex}`);
+    todoItem.remove();                                                  // remove the todo div in html
+    todoList.splice(todoIndex, 1);                                      // remove the todo in localstorage array
     localStorage.setItem('todoList', JSON.stringify(todoList));
     rearrangeTodos();
     showTodos();
-    klarRefresh();
 }
 
-function rearrangeTodos() {
+function rearrangeTodos() { // Rearranges the todo items's "id" in the localstorage array
     let todoList = JSON.parse(localStorage.getItem('todoList'));
     if (todoList.length > 0) {
         for (let element in todoList) {
@@ -108,12 +118,12 @@ function rearrangeTodos() {
         }
 }
 
-function klar(todoIndex) {
+function done(todoIndex) {
     let todoList = JSON.parse(localStorage.getItem('todoList'));
-    if (!todoList[todoIndex].klar) todoList[todoIndex].klar = true;
-    else todoList[todoIndex].klar = false;
+    if (!todoList[todoIndex].done) todoList[todoIndex].done = true;
+    else todoList[todoIndex].done = false;
     localStorage.setItem('todoList', JSON.stringify(todoList))
-    klarRefresh();
+    doneRefresh();
 }
 
 function heart(todoIndex) {
@@ -121,22 +131,34 @@ function heart(todoIndex) {
     if (!todoList[todoIndex].heart) todoList[todoIndex].heart = true;
     else todoList[todoIndex].heart = false;
     localStorage.setItem('todoList', JSON.stringify(todoList))
-    klarRefresh();
+    doneRefresh();
 }
 
 
-function klarRefresh() {
+function doneRefresh() {  // Combined function for both done and heart to show correct corresponding visual
     let todoList = JSON.parse(localStorage.getItem('todoList'));
     let todoDives = document.querySelectorAll('#todo-container div');
-    let todoIMG = document.querySelectorAll('#todo-container a');
-
+    let todoIMG = document.querySelectorAll('.heart');
     for (let i = 0; i < todoDives.length; i++) {
-        if (todoList[i].klar) {
+        if (todoList[i].done) {
             todoDives[i].style.backgroundColor = "lightcoral";
         } else todoDives[i].style.backgroundColor = "white";
         if (todoList[i].heart) {
-            todoIMG[i].style.backgroundImage = "url('./Pictures/Heart.png')";
-        } else todoIMG[i].style.backgroundImage = "url('./Pictures/HeartRed.png')";
+            todoIMG[i].style.backgroundImage = "url('./assets/images/HeartRed.png')";
+        } else todoIMG[i].style.backgroundImage = "url('./assets/images/Heart.png')";
     }
     localStorage.setItem('todoList', JSON.stringify(todoList));
 }
+
+// function todoClick() {
+//     let todoItems = document.getElementsByClassName('todo-item');
+//     console.log('hej')
+//     for (let i = 0; i < todoItems.length;i++) {
+//         // console.log(todoItems[i])
+//         todoItems[i].addEventListener("click", function() {
+//         done(i);
+//         // console.log('hej')
+//     });
+//     }
+// }
+

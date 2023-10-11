@@ -105,7 +105,6 @@ p, h1, h2, h3, h4, h5 {
     position: relative;
     min-width: 205px;
     max-width: 205px;
-    min-height: 150px;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.685);
     border-radius: 5px;
     padding: 5px 10px;
@@ -126,14 +125,8 @@ p, h1, h2, h3, h4, h5 {
     box-shadow: 0px 0px 5px rgb(179, 56, 56);
 }
 
-.removeButton,
-.klarButton {
+.doneButton {
     display: none;
-}
-
-.todo-item:hover .removeButton,
-.todo-item:hover .klarButton {
-    display: block;
 }
 
 /* Animation för flytande bild */
@@ -185,9 +178,38 @@ p, h1, h2, h3, h4, h5 {
     background-size: cover;
 }
 
+.removeButton {
+    float: right;
+    margin: 5px 0;
+    width: 30px;
+    height: 30px;
+}
+
+.binLid {
+    background-image: url("../assets/images/binLid.png");
+    background-size:contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    transition: 0.2s ease-in-out;
+}
+
+.binLid:hover,
+.removeButton:hover .binLid{
+    transform: rotate(45deg) translate(-2px, -3px);
+    cursor: pointer;
+}
+
 .heartRed {
     display: block;
     background-size: cover;
+}
+
+[class*='heart']:hover {
+    cursor: pointer;
 }
 
 time {
