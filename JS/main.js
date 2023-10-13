@@ -46,6 +46,10 @@ function showTodos() {
         let newTodo = document.createElement('div'); // ny div
         newTodo.setAttribute("class", "todo-item"); // ger nya div en class
         newTodo.setAttribute("id", `todo-item-${i}`); // ger nya div ett id
+        let todoCardHeader = document.createElement('div');
+        todoCardHeader.classList.add('card-header');
+        let todoCardBody = document.createElement('div');
+        todoCardBody.classList.add('card-body');
         (document.getElementById('todo-container')).appendChild(newTodo); // lägger till nya div i vår container
 
         // newTodo.addEventListener("click", function() {
@@ -59,21 +63,23 @@ function showTodos() {
         let todoDate = document.createElement('time');
         todoDate.innerHTML = `Created: ${todoList[i].date}`;
 
-
         let todoBody = document.createElement('p'); // skapa en P tag
         todoBody.innerHTML = todoList[i].body; // ge innehåll till p tag
 
+        let removeContainer = document.createElement('div');
+        removeContainer.classList.add('remove-btn')
+        removeContainer.setAttribute("onclick", `removeTodo(${i})`);
         let removeButton = document.createElement('img');
         removeButton.setAttribute("class", `removeButton`);
         removeButton.setAttribute("id", `removeButton-${i}`);
-        removeButton.setAttribute("onclick", `removeTodo(${i})`);
+
         removeButton.setAttribute("src", "./assets/images/bin.png");
 
         let binLid = document.createElement('a');
         binLid.setAttribute("class", "binLid");
         binLid.setAttribute("id", `binLid-${i}`);
-        binLid.setAttribute("onclick", `removeTodo(${i})`);
         
+        removeContainer.append(binLid, removeButton);
 /*         let doneButton = document.createElement('button');
         doneButton.setAttribute("class", `doneButton`);
         doneButton.setAttribute("id", `doneButton-${i}`);
@@ -87,12 +93,15 @@ function showTodos() {
         heartIMG.style.width = "18px";
         heartIMG.style.height = "18px";
         
-        newTodo.appendChild(todoHeader);
+        todoCardHeader.append(todoHeader, heartIMG, todoDate);
+        todoCardBody.append(todoBody, removeContainer);
+        newTodo.append(todoCardHeader, todoCardBody);
+        /* newTodo.appendChild(todoHeader);
         newTodo.appendChild(heartIMG);
         newTodo.appendChild(todoDate);
         newTodo.appendChild(todoBody);
         newTodo.appendChild(removeButton);
-        newTodo.appendChild(binLid);
+        newTodo.appendChild(binLid); */
         // newTodo.appendChild(doneButton);
     }
     doneRefresh();

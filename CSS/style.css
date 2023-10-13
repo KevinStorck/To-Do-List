@@ -46,7 +46,8 @@ p, h1, h2, h3, h4, h5 {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 5px;
-    width:100%;
+    /* width:50%; */
+    max-width: 400px;
 }
 
 #todo-header {
@@ -103,12 +104,22 @@ p, h1, h2, h3, h4, h5 {
 
 .todo-item {
     position: relative;
-    min-width: 205px;
-    max-width: 205px;
+    width: 205px;
+    min-height: 150px;
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.685);
     border-radius: 5px;
     padding: 5px 10px;
 }
+
+.card-header{
+    min-height: 40px;
+}
+
+.card-body {
+    min-height: 110px;
+    position: relative;
+}
+
 
 .todo-item h3 {
     margin: 10px 0;
@@ -179,8 +190,6 @@ p, h1, h2, h3, h4, h5 {
 }
 
 .removeButton {
-    float: right;
-    margin: 5px 0;
     width: 30px;
     height: 30px;
 }
@@ -190,11 +199,21 @@ p, h1, h2, h3, h4, h5 {
     background-size:contain;
     background-repeat: no-repeat;
     position: absolute;
-    bottom: 10px;
-    right: 10px;
+    /* bottom: 10px; */
+    /* right: 10px; */
     width: 30px;
     height: 30px;
     transition: 0.2s ease-in-out;
+    /* background-color: beige; */
+}
+
+.remove-btn {
+    display: flex;
+    flex-direction: column;
+    width: min-content;
+    position: absolute;
+    right: 0;
+    bottom: 0;
 }
 
 .binLid:hover,
