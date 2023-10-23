@@ -19,6 +19,8 @@ function saveTodoItem() {
         heart:false
     }
 
+    // console.log(todoDate)
+
     let todoList = [];
 
     if(storedTodos) {
@@ -148,11 +150,11 @@ function doneRefresh() {  // Combined function for both done and heart to show c
     let todoList = JSON.parse(localStorage.getItem('todoList'));
     let todoDives = document.querySelectorAll('#todo-container div');
     let todoIMG = document.querySelectorAll('.heart');
-    for (let i = 0; i < todoDives.length; i++) {
-        if (todoList[i].done) {
+    for (let i = 0; i < todoList.length; i++) {
+        if (todoDives[i].done) {
             todoDives[i].style.backgroundColor = "lightcoral";
         } else todoDives[i].style.backgroundColor = "white";
-        if (todoList[i].heart) {
+        if (todoDives[i].heart) {
             todoIMG[i].style.backgroundImage = "url('./assets/images/HeartRed.png')";
         } else todoIMG[i].style.backgroundImage = "url('./assets/images/Heart.png')";
     }
