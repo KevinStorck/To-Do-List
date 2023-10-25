@@ -54,10 +54,6 @@ function showTodos() {
         todoCardBody.classList.add('card-body');
         (document.getElementById('todo-container')).appendChild(newTodo); // lägger till nya div i vår container
 
-        // newTodo.addEventListener("click", function() {
-        // done(i);
-        // })
-
         let todoHeader = document.createElement('h3'); // skapa h3
         // todoHeader.setAttribute("id", `header-${i}`);
         todoHeader.innerHTML = todoList[i].header; // ge innehåll till h3
@@ -82,11 +78,6 @@ function showTodos() {
         binLid.setAttribute("id", `binLid-${i}`);
         
         removeContainer.append(binLid, removeButton);
-/*         let doneButton = document.createElement('button');
-        doneButton.setAttribute("class", `doneButton`);
-        doneButton.setAttribute("id", `doneButton-${i}`);
-        doneButton.setAttribute("onclick", `done(${i})`);
-        doneButton.innerHTML = 'Done'; */
 
         let heartIMG = document.createElement('a');
         heartIMG.setAttribute('class', 'heart');
@@ -98,13 +89,6 @@ function showTodos() {
         todoCardHeader.append(todoHeader, heartIMG, todoDate);
         todoCardBody.append(todoBody, removeContainer);
         newTodo.append(todoCardHeader, todoCardBody);
-        /* newTodo.appendChild(todoHeader);
-        newTodo.appendChild(heartIMG);
-        newTodo.appendChild(todoDate);
-        newTodo.appendChild(todoBody);
-        newTodo.appendChild(removeButton);
-        newTodo.appendChild(binLid); */
-        // newTodo.appendChild(doneButton);
     }
     doneRefresh();
 }
@@ -145,31 +129,17 @@ function heart(todoIndex) {
     doneRefresh();
 }
 
-
 function doneRefresh() {  // Combined function for both done and heart to show correct corresponding visual
     let todoList = JSON.parse(localStorage.getItem('todoList'));
-    let todoDives = document.querySelectorAll('#todo-container div');
-    let todoIMG = document.querySelectorAll('.heart');
+    let todoItems = document.querySelectorAll('.todo-item');
+    let todoHearts = document.querySelectorAll('.heart');
     for (let i = 0; i < todoList.length; i++) {
-        if (todoDives[i].done) {
-            todoDives[i].style.backgroundColor = "lightcoral";
-        } else todoDives[i].style.backgroundColor = "white";
-        if (todoDives[i].heart) {
-            todoIMG[i].style.backgroundImage = "url('./assets/images/HeartRed.png')";
-        } else todoIMG[i].style.backgroundImage = "url('./assets/images/Heart.png')";
+        if (todoList[i].done) {
+            todoItems[i].style.backgroundColor = "lightcoral";
+        } else todoItems[i].style.backgroundColor = "white";
+        if (todoList[i].heart) {
+            todoHearts[i].style.backgroundImage = "url('./assets/images/HeartRed.png')";
+        } else todoHearts[i].style.backgroundImage = "url('./assets/images/Heart.png')";
     }
     localStorage.setItem('todoList', JSON.stringify(todoList));
 }
-
-// function todoClick() {
-//     let todoItems = document.getElementsByClassName('todo-item');
-//     console.log('hej')
-//     for (let i = 0; i < todoItems.length;i++) {
-//         // console.log(todoItems[i])
-//         todoItems[i].addEventListener("click", function() {
-//         done(i);
-//         // console.log('hej')
-//     });
-//     }
-// }
-
