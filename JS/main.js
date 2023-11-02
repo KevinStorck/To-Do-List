@@ -1,68 +1,65 @@
-onload = () => showTodos();
+onload = () => generateTodos();
 
 function saveTodoItem() {
-    let todoBody = document.getElementById('todo-body').value;
-    let todoHeader = document.getElementById('todo-header').value;
-    let todoCategory = document.getElementById('todo-category').value;
-    let todoDate = (new Date());
+    let inputHeader = document.getElementById('todo-header').value;
+    let inputBody = document.getElementById('todo-body').value;
+    let inputCategory = document.getElementById('todo-category').value;
+    let inputDate = (new Date());
 
     let storedTodos = JSON.parse(localStorage.getItem('todoList'));
     let id = storedTodos ? JSON.parse(localStorage.getItem('todoList')).length : 0;
 
     let todo = {
-        header:todoHeader,
-        body:todoBody,
-        category:todoCategory,
-        date:todoDate,
+        header:inputHeader,
+        body:inputBody,
+        category:inputCategory,
+        date:inputDate,
         id:id,
         done:false,
         heart:false
     }
 
-    // console.log(todoDate)
-
-    let todoList = [];
+    let updatedTodoList = [];
 
     if(storedTodos) {
-        todoList = storedTodos;
-        todoList.push(todo)
+        updatedTodoList = storedTodos;
+        updatedTodoList.push(todo)
     }
-    else todoList.push(todo)
+    else updatedTodoList.push(todo)
 
-    localStorage.setItem('todoList', JSON.stringify(todoList))
+    localStorage.setItem('todoList', JSON.stringify(updatedTodoList))
     
     document.getElementById('todo-header').value = '';
     document.getElementById('todo-body').value = '';
 
-    showTodos();
-    doneRefresh();
+    generateTodos();
 }
 
-function showTodos() {
-    let todoList = JSON.parse(localStorage.getItem('todoList'));
-    let container = document.getElementById("todo-container");
-    container.innerHTML = ("");
-    if(!todoList) return ;
-    for (let i = 0; i < todoList.length; i++) {
+function generateTodos() {
+    let storedTodoList = JSON.parse(localStorage.getItem('todoList'));
+    let todosContainer = document.getElementById("todo-container");
+    todosContainer.innerHTML = ("");
+    if(!storedTodoList) return ;
+    for (let i = 0; i < storedTodoList.length; i++) {
 
-        let newTodo = document.createElement('div'); // ny div
-        newTodo.setAttribute("class", "todo-item"); // ger nya div en class
-        newTodo.setAttribute("id", `todo-item-${i}`); // ger nya div ett id
+        let TodoCard = document.createElement('div'); // ny div
+        TodoCard.setAttribute("class", "todo-item"); // ger nya div en class
+        TodoCard.setAttribute("id", `todo-item-${i}`); // ger nya div ett id
         let todoCardHeader = document.createElement('div');
         todoCardHeader.classList.add('card-header');
         let todoCardBody = document.createElement('div');
         todoCardBody.classList.add('card-body');
-        (document.getElementById('todo-container')).appendChild(newTodo); // lägger till nya div i vår container
+        (document.getElementById('todo-container')).appendChild(TodoCard); // lägger till nya div i vår container
 
         let todoHeader = document.createElement('h3'); // skapa h3
         // todoHeader.setAttribute("id", `header-${i}`);
-        todoHeader.innerHTML = todoList[i].header; // ge innehåll till h3
+        todoHeader.innerHTML = storedTodoList[i].header; // ge innehåll till h3
 
         let todoDate = document.createElement('time');
-        todoDate.innerHTML = `Created: ${todoList[i].date}`;
+        todoDate.innerHTML = `Created: ${storedTodoList[i].date}`;
 
         let todoBody = document.createElement('p'); // skapa en P tag
-        todoBody.innerHTML = todoList[i].body; // ge innehåll till p tag
+        todoBody.innerHTML = storedTodoList[i].body; // ge innehåll till p tag
 
         let removeContainer = document.createElement('div');
         removeContainer.classList.add('remove-btn')
@@ -88,58 +85,58 @@ function showTodos() {
         
         todoCardHeader.append(todoHeader, heartIMG, todoDate);
         todoCardBody.append(todoBody, removeContainer);
-        newTodo.append(todoCardHeader, todoCardBody);
+        TodoCard.append(todoCardHeader, todoCardBody);
     }
     doneRefresh();
 }
 
 function removeTodo(todoIndex) {
-    let todoList = JSON.parse(localStorage.getItem('todoList'));
+    let storedTodoList = JSON.parse(localStorage.getItem('todoList'));
     let todoItem = document.getElementById(`todo-item-${todoIndex}`);
     todoItem.remove();                                                  // remove the todo div in html
-    todoList.splice(todoIndex, 1);                                      // remove the todo in localstorage array
-    localStorage.setItem('todoList', JSON.stringify(todoList));
+    storedTodoList.splice(todoIndex, 1);                                      // remove the todo in localstorage array
+    localStorage.setItem('todoList', JSON.stringify(storedTodoList));
     rearrangeTodos();
-    showTodos();
+    generateTodos();
 }
 
 function rearrangeTodos() { // Rearranges the todo items's "id" in the localstorage array
-    let todoList = JSON.parse(localStorage.getItem('todoList'));
-    if (todoList.length > 0) {
-        for (let element in todoList) {
-            todoList[element].id = element;
+    let storedTodoList = JSON.parse(localStorage.getItem('todoList'));
+    if (storedTodoList.length > 0) {
+        for (let todo in storedTodoList) {
+            storedTodoList[todo].id = todo;
         }
-        localStorage.setItem('todoList', JSON.stringify(todoList))
+        localStorage.setItem('todoList', JSON.stringify(storedTodoList))
         }
 }
 
 function done(todoIndex) {
-    let todoList = JSON.parse(localStorage.getItem('todoList'));
-    if (!todoList[todoIndex].done) todoList[todoIndex].done = true;
-    else todoList[todoIndex].done = false;
-    localStorage.setItem('todoList', JSON.stringify(todoList))
+    let storedTodoList = JSON.parse(localStorage.getItem('todoList'));
+    if (!storedTodoList[todoIndex].done) storedTodoList[todoIndex].done = true;
+    else storedTodoList[todoIndex].done = false;
+    localStorage.setItem('todoList', JSON.stringify(storedTodoList))
     doneRefresh();
 }
 
 function heart(todoIndex) {
-    let todoList = JSON.parse(localStorage.getItem('todoList'));
-    if (!todoList[todoIndex].heart) todoList[todoIndex].heart = true;
-    else todoList[todoIndex].heart = false;
-    localStorage.setItem('todoList', JSON.stringify(todoList))
+    let storedTodoList = JSON.parse(localStorage.getItem('todoList'));
+    if (!storedTodoList[todoIndex].heart) storedTodoList[todoIndex].heart = true;
+    else storedTodoList[todoIndex].heart = false;
+    localStorage.setItem('todoList', JSON.stringify(storedTodoList))
     doneRefresh();
 }
 
 function doneRefresh() {  // Combined function for both done and heart to show correct corresponding visual
-    let todoList = JSON.parse(localStorage.getItem('todoList'));
+    let storedTodoList = JSON.parse(localStorage.getItem('todoList'));
     let todoItems = document.querySelectorAll('.todo-item');
     let todoHearts = document.querySelectorAll('.heart');
-    for (let i = 0; i < todoList.length; i++) {
-        if (todoList[i].done) {
+    for (let i = 0; i < storedTodoList.length; i++) {
+        if (storedTodoList[i].done) {
             todoItems[i].style.backgroundColor = "lightcoral";
         } else todoItems[i].style.backgroundColor = "white";
-        if (todoList[i].heart) {
+        if (storedTodoList[i].heart) {
             todoHearts[i].style.backgroundImage = "url('./assets/images/HeartRed.png')";
         } else todoHearts[i].style.backgroundImage = "url('./assets/images/Heart.png')";
     }
-    localStorage.setItem('todoList', JSON.stringify(todoList));
+    localStorage.setItem('todoList', JSON.stringify(storedTodoList));
 }
