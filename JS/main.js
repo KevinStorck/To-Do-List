@@ -44,7 +44,7 @@ function generateTodos() {
 
         let TodoCard = document.createElement('div'); // ny div
         TodoCard.setAttribute("class", "todo-item"); // ger nya div en class
-        TodoCard.setAttribute("id", `todo-item-${i}`); // ger nya div ett id
+        // TodoCard.setAttribute("id", `todo-item-${i}`); // ger nya div ett id
         let todoCardHeader = document.createElement('div');
         todoCardHeader.classList.add('card-header');
         let todoCardBody = document.createElement('div');
@@ -63,23 +63,25 @@ function generateTodos() {
 
         let removeContainer = document.createElement('div');
         removeContainer.classList.add('remove-btn')
-        removeContainer.setAttribute("onclick", `removeTodo(${i})`);
+        removeContainer.setAttribute("onclick", `removeTodo(this)`);
+        // removeContainer.setAttribute("onclick", `removeTodo(${i})`);
         let removeButton = document.createElement('img');
         removeButton.setAttribute("class", `removeButton`);
-        removeButton.setAttribute("id", `removeButton-${i}`);
+        // removeButton.setAttribute("id", `removeButton-${i}`);
 
         removeButton.setAttribute("src", "./assets/images/bin.png");
 
         let binLid = document.createElement('a');
         binLid.setAttribute("class", "binLid");
-        binLid.setAttribute("id", `binLid-${i}`);
+        // binLid.setAttribute("id", `binLid-${i}`);
         
         removeContainer.append(binLid, removeButton);
 
         let heartIMG = document.createElement('a');
         heartIMG.setAttribute('class', 'heart');
-        heartIMG.setAttribute("id", `heart-${i}`);
-        heartIMG.setAttribute("onclick", `heart(${i})`);
+        // heartIMG.setAttribute("id", `heart-${i}`);
+        heartIMG.setAttribute("onclick", `heart(this)`);
+        // heartIMG.setAttribute("onclick", `heart(${i})`);
         heartIMG.style.width = "18px";
         heartIMG.style.height = "18px";
         
@@ -87,10 +89,21 @@ function generateTodos() {
         todoCardBody.append(todoBody, removeContainer);
         TodoCard.append(todoCardHeader, todoCardBody);
     }
-    doneRefresh();
+    // doneRefresh();
 }
 
-function removeTodo(todoIndex) {
+function removeTodo(clickedTodo) {
+    let storedTodoList = JSON.parse(localStorage.getItem('todoList'));
+    clickedTodo.remove();                                                  // remove the todo div in html
+    localStorage.setItem('todoList', JSON.stringify(storedTodoList));
+    updateStoredTodos();
+}
+
+function updateStoredTodos() {
+    
+}
+
+/* function removeTodo(todoIndex) {
     let storedTodoList = JSON.parse(localStorage.getItem('todoList'));
     let todoItem = document.getElementById(`todo-item-${todoIndex}`);
     todoItem.remove();                                                  // remove the todo div in html
@@ -98,9 +111,9 @@ function removeTodo(todoIndex) {
     localStorage.setItem('todoList', JSON.stringify(storedTodoList));
     rearrangeTodos();
     generateTodos();
-}
+} */
 
-function rearrangeTodos() { // Rearranges the todo items's "id" in the localstorage array
+/* function rearrangeTodos() { // Rearranges the todo items's "id" in the localstorage array
     let storedTodoList = JSON.parse(localStorage.getItem('todoList'));
     if (storedTodoList.length > 0) {
         for (let todo in storedTodoList) {
@@ -108,25 +121,25 @@ function rearrangeTodos() { // Rearranges the todo items's "id" in the localstor
         }
         localStorage.setItem('todoList', JSON.stringify(storedTodoList))
         }
-}
+} */
 
-function done(todoIndex) {
+/* function done(todoIndex) {
     let storedTodoList = JSON.parse(localStorage.getItem('todoList'));
     if (!storedTodoList[todoIndex].done) storedTodoList[todoIndex].done = true;
     else storedTodoList[todoIndex].done = false;
     localStorage.setItem('todoList', JSON.stringify(storedTodoList))
     doneRefresh();
-}
+} */
 
-function heart(todoIndex) {
+/* function heart(todoIndex) {
     let storedTodoList = JSON.parse(localStorage.getItem('todoList'));
     if (!storedTodoList[todoIndex].heart) storedTodoList[todoIndex].heart = true;
     else storedTodoList[todoIndex].heart = false;
     localStorage.setItem('todoList', JSON.stringify(storedTodoList))
     doneRefresh();
-}
+} */
 
-function doneRefresh() {  // Combined function for both done and heart to show correct corresponding visual
+/* function doneRefresh() {  // Combined function for both done and heart to show correct corresponding visual
     let storedTodoList = JSON.parse(localStorage.getItem('todoList'));
     let todoItems = document.querySelectorAll('.todo-item');
     let todoHearts = document.querySelectorAll('.heart');
@@ -139,4 +152,4 @@ function doneRefresh() {  // Combined function for both done and heart to show c
         } else todoHearts[i].style.backgroundImage = "url('./assets/images/Heart.png')";
     }
     localStorage.setItem('todoList', JSON.stringify(storedTodoList));
-}
+} */
