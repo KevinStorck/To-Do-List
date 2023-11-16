@@ -100,7 +100,7 @@ function removeTodo(clickedTodo) {
 }
 
 function updateStoredTodos() {
-    
+    // test
 }
 
 /* function removeTodo(todoIndex) {
