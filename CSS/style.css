@@ -67,6 +67,7 @@ p, h1, h2, h3, h4, h5 {
     grid-column-start: span 2;
     width: 100%;
     min-height: 150px;
+    resize: none;
 }
 
 #create-todo-btn {
@@ -180,12 +181,20 @@ p, h1, h2, h3, h4, h5 {
     content: "Todo's by Storck :)";    /* Slutgiltiga headern */
 }
 
-.heart {
+.heart,
+.heartRed {
     display: block;
     position: absolute;
     right: 5px;
     top: 5px;
+    width: 18px;
+    height: 18px;
     background-size: cover;
+    background-image: url("../assets/images/Heart.png");
+}
+
+.heartRed {
+    background-image: url("../assets/images/HeartRed.png");
 }
 
 .removeButton {
@@ -219,11 +228,6 @@ p, h1, h2, h3, h4, h5 {
 .removeButton:hover .binLid{
     transform: rotate(45deg) translate(-2px, -3px);
     cursor: pointer;
-}
-
-.heartRed {
-    display: block;
-    background-size: cover;
 }
 
 [class*='heart']:hover {
