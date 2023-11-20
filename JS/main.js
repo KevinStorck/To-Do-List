@@ -36,8 +36,10 @@ function saveTodoItem() {
 
 function generateTodos() {
     let storedTodoList = JSON.parse(localStorage.getItem('todoList'));
-    let todosContainer = document.getElementById("todo-container");
-    todosContainer.innerHTML = ("");
+    let personalTodosContainer = document.getElementById("personal-todos")
+    let workTodosContainer = document.getElementById("work-todos")
+    personalTodosContainer.innerHTML = ("");
+    workTodosContainer.innerHTML = ("");
     if(!storedTodoList) return ;
     for (let i = 0; i < storedTodoList.length; i++) {
 
@@ -47,7 +49,6 @@ function generateTodos() {
         todoCardHeader.classList.add('card-header');
         let todoCardBody = document.createElement('div');
         todoCardBody.classList.add('card-body');
-        (document.getElementById('todo-container')).appendChild(TodoCard);
 
         let todoHeader = document.createElement('h3');
         todoHeader.innerHTML = storedTodoList[i].header;
@@ -81,6 +82,12 @@ function generateTodos() {
         todoCardHeader.append(todoHeader, heart, todoDate);
         todoCardBody.append(todoBody, removeContainer);
         TodoCard.append(todoCardHeader, todoCardBody);
+
+        if (storedTodoList[i].category == 'personlig') {
+            personalTodosContainer.append(TodoCard);
+        } else if (storedTodoList[i].category == 'jobb'){
+            workTodosContainer.append(TodoCard);
+        }
     }
 }
 

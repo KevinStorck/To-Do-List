@@ -95,11 +95,28 @@ p, h1, h2, h3, h4, h5 {
 }
 
 #todo-container {
-    margin-top: 30px;
     display: flex;
-    align-items: flex-start;
     flex-wrap: wrap;
+}
+
+#personal-todos,
+#work-todos {
+    margin-top: 10px;
+    padding: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    width: max-content;
     gap: 15px;
+    background-color: #aaaaaa3a;
+    border-radius: 5px;
+    box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.685);
+}
+
+#todo-container p {
+    font-size: 2em;
+    width: 10%;
+    display: block;
+    /* margin: 0px 15px 0px 0px; */
 }
 
 .todo-item {
@@ -109,6 +126,7 @@ p, h1, h2, h3, h4, h5 {
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.685);
     border-radius: 5px;
     padding: 5px 10px;
+    background-color: white;
 }
 
 .card-header{
@@ -189,7 +207,7 @@ p, h1, h2, h3, h4, h5 {
     top: 5px;
     width: 18px;
     height: 18px;
-    background-size: cover;
+    background-size: contain;
     background-image: url("../assets/images/Heart.png");
 }
 
