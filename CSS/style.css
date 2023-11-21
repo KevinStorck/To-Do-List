@@ -9,7 +9,7 @@ p, h1, h2, h3, h4, h5 {
     color:#424242;
 }
 
-.page-container {
+#page-container {
     min-height:100vh;
     width:100%;
     padding:20px;
@@ -86,6 +86,10 @@ p, h1, h2, h3, h4, h5 {
     background-color: #424242ea;
 }
 
+#todo-section {
+    display: flex;
+    flex-wrap: wrap;
+}
 
 #todo-category, #todo-body, #todo-header {
     border:1px solid #424242;
@@ -99,24 +103,34 @@ p, h1, h2, h3, h4, h5 {
     flex-wrap: wrap;
 }
 
-#personal-todos,
-#work-todos {
+.category-container {
+    margin-top: 15px;
+    min-width: 50%;
+}
+
+.category-container h4 {
+    font-size: 3em;
+}
+
+.todos-container {
     margin-top: 10px;
     padding: 15px;
     display: flex;
     flex-wrap: wrap;
     width: max-content;
+    justify-content: space-evenly;
+    max-width: 100%;
     gap: 15px;
-    background-color: #aaaaaa3a;
+    background-image: url("../assets/images/Cork-background.jpg");
     border-radius: 5px;
     box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.685);
+    align-items: flex-start;
 }
 
 #todo-container p {
     font-size: 2em;
     width: 10%;
     display: block;
-    /* margin: 0px 15px 0px 0px; */
 }
 
 .todo-item {
@@ -126,7 +140,7 @@ p, h1, h2, h3, h4, h5 {
     box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.685);
     border-radius: 5px;
     padding: 5px 10px;
-    background-color: white;
+    background-color: rgb(255, 251, 146);
 }
 
 .card-header{
@@ -135,7 +149,6 @@ p, h1, h2, h3, h4, h5 {
 
 .card-body {
     min-height: 110px;
-    position: relative;
 }
 
 
@@ -147,7 +160,7 @@ p, h1, h2, h3, h4, h5 {
 
 .todo-item P {
     padding-top: 5px;
-    overflow-wrap:break-word;
+    width: 100%;
 }
 
 .todo-item:hover {
@@ -225,12 +238,9 @@ p, h1, h2, h3, h4, h5 {
     background-size:contain;
     background-repeat: no-repeat;
     position: absolute;
-    /* bottom: 10px; */
-    /* right: 10px; */
     width: 30px;
     height: 30px;
     transition: 0.2s ease-in-out;
-    /* background-color: beige; */
 }
 
 .remove-btn {
@@ -238,8 +248,8 @@ p, h1, h2, h3, h4, h5 {
     flex-direction: column;
     width: min-content;
     position: absolute;
-    right: 0;
-    bottom: 0;
+    right: 5px;
+    bottom: 5px;
 }
 
 .binLid:hover,

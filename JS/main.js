@@ -36,10 +36,8 @@ function saveTodoItem() {
 
 function generateTodos() {
     let storedTodoList = JSON.parse(localStorage.getItem('todoList'));
-    let personalTodosContainer = document.getElementById("personal-todos")
-    let workTodosContainer = document.getElementById("work-todos")
-    personalTodosContainer.innerHTML = ("");
-    workTodosContainer.innerHTML = ("");
+    document.getElementById('todo-section').innerHTML = ('');
+
     if(!storedTodoList) return ;
     for (let i = 0; i < storedTodoList.length; i++) {
 
@@ -83,12 +81,24 @@ function generateTodos() {
         todoCardBody.append(todoBody, removeContainer);
         TodoCard.append(todoCardHeader, todoCardBody);
 
-        if (storedTodoList[i].category == 'personlig') {
-            personalTodosContainer.append(TodoCard);
-        } else if (storedTodoList[i].category == 'jobb'){
-            workTodosContainer.append(TodoCard);
-        }
+        createTodoSection(storedTodoList[i].category, TodoCard);
     }
+}
+
+function createTodoSection(category, TodoCard) {
+    if (!document.getElementById(category)) {
+        let newSection = document.createElement('div');
+        newSection.classList.add('category-container');
+        newSection.id = category;
+        let newHeader = document.createElement('h4');
+        newHeader.innerHTML = category;
+        let todosContainer = document.createElement('div');
+        todosContainer.classList.add('todos-container')
+        todosContainer.id = `${category}-todos`;
+        document.getElementById('todo-section').append(newSection);
+        newSection.append(newHeader, todosContainer);
+    }
+    document.getElementById(`${category}-todos`).append(TodoCard);
 }
 
 function removeTodo(ID) {

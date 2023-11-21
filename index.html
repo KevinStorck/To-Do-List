@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./CSS/style.css">
 </head>
 <body>
-    <div class="page-container">
+    <div id="page-container">
         <div class="small-hero">
                 <img class="logo" src="./assets/images/icon.svg" alt="Pen logo">
         <h2 class="welcome-header"></h2>
@@ -21,14 +21,7 @@
             <textarea id="todo-body" placeholder="Skriv något kul"></textarea>
             <button onclick="saveTodoItem()" id="create-todo-btn">Spara</button>
         </div>
-        <div>
-            <h4>Personlig</h4>
-            <div id="personal-todos"></div>
-        </div>
-        <div>
-            <h4>Jobb</h4>
-            <div id="work-todos"></div>
-        </div>
+        <div id="todo-section"></div>
     </div>
     <script src="./JS/main.js"></script>
 </body>
