@@ -112,10 +112,10 @@ function createTodoSection(category, TodoCard) {
 
 function removeTodo(ID) {
     let storedTodoList = fetchTodos();
-    let foundTodo;
+    // let foundTodo;
     for (let i = 0; i < storedTodoList.length; i++) {
         if (storedTodoList[i].id === ID) {
-            foundTodo = storedTodoList[i];
+            // foundTodo = storedTodoList[i];
             storedTodoList.splice(i, 1);
             storeTodos(storedTodoList);
             generateTodos();
@@ -135,20 +135,24 @@ function generateID() {
     let storedTodoList = fetchTodos();
     let newID = Math.random() * Math.pow(10, 17);
     if(!storedTodoList) return newID;
-    try {while (storedTodoList.find(({id}) => id === newID)) newID = Math.random() * Math.pow(10, 17); 
+    while (storedTodoList.find(({id}) => id === newID)) newID = Math.random() * Math.pow(10, 17);
+    return newID;
+    /* try {while (storedTodoList.find(({id}) => id === newID)) newID = Math.random() * Math.pow(10, 17); 
     return newID;
 }
 catch {
     return newID;
-}
+} */
 }
 
 function fetchTodos() {
     return JSON.parse(localStorage.getItem('todoList'));
 }
+
 function storeTodos(todos) {
     localStorage.setItem('todoList', JSON.stringify(todos));
 }
+
 const randomTodoArray = [
     {
         "header": "Weekend Getaway",
@@ -156,7 +160,7 @@ const randomTodoArray = [
         "category": "personlig",
         "date": "2022-05-14T00:00:00.000Z",
         "done": false,
-        "heart": false
+        "heart": false,
     },
     {
         "header": "Self-Pampering",
