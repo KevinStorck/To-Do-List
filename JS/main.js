@@ -112,10 +112,8 @@ function createTodoSection(category, TodoCard) {
 
 function removeTodo(ID) {
     let storedTodoList = fetchTodos();
-    // let foundTodo;
     for (let i = 0; i < storedTodoList.length; i++) {
         if (storedTodoList[i].id === ID) {
-            // foundTodo = storedTodoList[i];
             storedTodoList.splice(i, 1);
             storeTodos(storedTodoList);
             generateTodos();
@@ -143,6 +141,51 @@ function generateID() {
 catch {
     return newID;
 } */
+}
+
+function inputNewCategory() {
+    document.getElementsByTagName('#page-container')
+    let createCategoryContainer = document.createElement('div');
+    createCategoryContainer.id = 'create-category-container';
+
+    let inputField = document.createElement('input');
+    inputField.style.width = '250px';
+    inputField.classList.add('input-field');
+    inputField.placeholder = 'New Category';
+
+    let addBtn = document.createElement('button');
+    addBtn.classList.add('btns');
+    addBtn.id = 'add-category-btn';
+    addBtn.innerHTML = 'Add Category';
+    addBtn.setAttribute('onclick', 'addNewCategory()');
+    // addBtn.onclick = 'addNewCategory()';
+
+    let pageContainer = document.getElementById('page-container');
+
+    let blurElements = document.querySelectorAll('#page-container > *:not(#create-category-container)');
+    for (let i = 0; i < blurElements.length; i++) {
+        blurElements[i].classList.add('blur');
+    }
+
+
+    pageContainer.append(createCategoryContainer);
+    createCategoryContainer.append(inputField, addBtn);
+}
+
+function addNewCategory() {
+    let inputCategory = document.querySelector('#create-category-container > input');
+    let newCategory = document.createElement('option');
+    newCategory.value = inputCategory.value;
+    newCategory.innerHTML = inputCategory.value;
+    
+    // console.log(document.querySelector('#todo-category option:last-child'));
+    document.getElementById('todo-category').insertBefore(newCategory, document.querySelector('#todo-category option:last-child'));
+
+    let unBlurElements = document.querySelectorAll('#page-container > *:not(#create-category-container)');
+    for (let i = 0; i < unBlurElements.length; i++) {
+        unBlurElements[i].classList.remove('blur');
+    }
+    document.getElementById('create-category-container').remove();
 }
 
 function fetchTodos() {
