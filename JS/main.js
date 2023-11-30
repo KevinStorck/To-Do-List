@@ -143,13 +143,35 @@ catch {
 } */
 }
 
-function inputNewCategory() {
-    document.getElementsByTagName('#page-container')
+function listener(e) {
+    console.log(e);
+    if (e.key == 'Escape') {
+    document.removeEventListener('keydown', listener);
+    document.getElementById('manage-categories-container').remove();
+    let blurElements = document.querySelectorAll('#page-container > *:not(#manage-categories-container)');
+    for (let i = 0; i < blurElements.length; i++) {
+        blurElements[i].classList.remove('blur');
+    }
+    generateCategories();
+    }
+}
+
+function manageCategory() {
     let createCategoryContainer = document.createElement('div');
-    createCategoryContainer.id = 'create-category-container';
+    createCategoryContainer.on
+    createCategoryContainer.id = 'manage-categories-container';
+
+    document.addEventListener('keydown', listener);
+
+    // for (const category in categories) {
+    //     let newCategory = document.createElement('option');
+    //     newCategory.insertBefore(newCategory, document.querySelector('#todo-category option:last-child'));
+
+    // }
 
     let inputField = document.createElement('input');
     inputField.style.width = '250px';
+    inputField.id = 'input-field-new-category';
     inputField.classList.add('input-field');
     inputField.placeholder = 'New Category';
 
@@ -162,7 +184,7 @@ function inputNewCategory() {
 
     let pageContainer = document.getElementById('page-container');
 
-    let blurElements = document.querySelectorAll('#page-container > *:not(#create-category-container)');
+    let blurElements = document.querySelectorAll('#page-container > *:not(#manage-categories-container)');
     for (let i = 0; i < blurElements.length; i++) {
         blurElements[i].classList.add('blur');
     }
@@ -173,19 +195,34 @@ function inputNewCategory() {
 }
 
 function addNewCategory() {
-    let inputCategory = document.querySelector('#create-category-container > input');
-    let newCategory = document.createElement('option');
-    newCategory.value = inputCategory.value;
-    newCategory.innerHTML = inputCategory.value;
-    
-    // console.log(document.querySelector('#todo-category option:last-child'));
-    document.getElementById('todo-category').insertBefore(newCategory, document.querySelector('#todo-category option:last-child'));
+    let storedCategories = fetchCategories();
+    let newCategory = document.getElementById('input-field-new-category');
 
-    let unBlurElements = document.querySelectorAll('#page-container > *:not(#create-category-container)');
+    if(storeCategories) {
+        storedCategories = [];
+        storedCategories.push(newCategory.value)
+    }
+    else storedCategories.push(newCategory.value)
+
+    storeCategories(storedCategories);
+
+    let unBlurElements = document.querySelectorAll('#page-container > *:not(#manage-categories-container)');
     for (let i = 0; i < unBlurElements.length; i++) {
         unBlurElements[i].classList.remove('blur');
     }
-    document.getElementById('create-category-container').remove();
+    document.getElementById('manage-categories-container').remove();
+}
+
+function generateCategories() {
+    let storedCategories = fetchCategories();
+    if (!storedCategories) return;
+    for (let i = 0; i < storedCategories.length; i++) {
+        let newCategory = document.createElement('option');
+        newCategory.classList.add('category');
+        newCategory.value = storedCategories[i];
+        newCategory.innerHTML = storedCategories[i];
+        document.getElementById('todo-category').insertBefore(newCategory, document.querySelector('#todo-category option:last-child'));
+    }
 }
 
 function fetchTodos() {
@@ -194,6 +231,14 @@ function fetchTodos() {
 
 function storeTodos(todos) {
     localStorage.setItem('todoList', JSON.stringify(todos));
+}
+
+function fetchCategories() {
+    return JSON.parse(localStorage.getItem('todoCategories'));
+}
+
+function storeCategories(categories) {
+    localStorage.setItem('todoCategories', JSON.stringify(categories));
 }
 
 const randomTodoArray = [

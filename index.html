@@ -15,9 +15,9 @@
         <div class="container">
             <input type="text" id="todo-header" class="input-field" placeholder="header">
             <select id="todo-category" placeholder="category">
-                <option value="personlig">Personlig</option>
-                <option value="jobb">Jobb</option>
-                <option onclick="inputNewCategory()">Ny Kategori</option>
+                <option value="personlig" class="category">Personlig</option>
+                <option value="jobb" class="category">Jobb</option>
+                <option onclick="manageCategory()">Ny Kategori</option>
             </select>
             <textarea id="todo-body" placeholder="Skriv något kul"></textarea>
             <button onclick="saveTodoItem()" id="create-todo-btn" class="btns">Spara</button>
