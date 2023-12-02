@@ -97,8 +97,29 @@ p, h1, h2, h3, h4, h5 {
     padding: 15px;
     /* height: 800px;
     width: 400px; */
-    background-color: aqua;
+    background-color: cornsilk;
     border-radius: 5px;
+    box-shadow: 0px 0px 2px black;
+}
+
+.manage-this-category {
+    border:1px solid #424242;
+    background-color: lightgrey;
+    border-radius: 5px;
+    outline:none;
+    margin-bottom: 5px;
+    padding: 0px 5px 0px 10px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.remove-category-img {
+    width: 30px;
+    height: 30px;
+    background-color: #424242;
+    justify-items: flex-end;
 }
 
 #add-category-btn {

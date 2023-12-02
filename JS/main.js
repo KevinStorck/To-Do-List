@@ -14,7 +14,7 @@ function saveTodoItem() {
         todo = createRandomTodo();
         todo = {
             ...todo,
-            id:generateID()
+            id:generateID(fetchTodos())
         }
     }
     else
@@ -23,7 +23,7 @@ function saveTodoItem() {
         body:inputBody,
         category:inputCategory,
         date:inputDate,
-        id:generateID(),
+        id:generateID(fetchTodos()),
         done:false,
         heart:false
     }
@@ -44,7 +44,8 @@ function saveTodoItem() {
 }
 
 function generateTodos() {
-let storedTodoList = fetchTodos();
+    generateCategories();
+    let storedTodoList = fetchTodos();
     document.getElementById('todo-section').innerHTML = ('');
 
     if(!storedTodoList) return ;
@@ -69,7 +70,7 @@ let storedTodoList = fetchTodos();
 
         let removeContainer = document.createElement('div');
         removeContainer.classList.add('remove-btn')
-        removeContainer.setAttribute("onclick", `removeTodo(${storedTodoList[i].id})`);
+        removeContainer.setAttribute("onclick", `removeTodo(${storedTodoList,storedTodoList[i].id})`);
         let removeButton = document.createElement('img');
         removeButton.setAttribute("class", `removeButton`);
 
@@ -111,12 +112,35 @@ function createTodoSection(category, TodoCard) {
 }
 
 function removeTodo(ID) {
-    let storedTodoList = fetchTodos();
-    for (let i = 0; i < storedTodoList.length; i++) {
-        if (storedTodoList[i].id === ID) {
-            storedTodoList.splice(i, 1);
-            storeTodos(storedTodoList);
-            generateTodos();
+    storeTodos(removeObjectWithID(fetchTodos(), ID));
+    // for (let i = 0; i < storedTodoList.length; i++) {
+    //     if (storedTodoList[i].id === ID) {
+    //         storedTodoList.splice(i, 1);
+    //         storeTodos(storedTodoList);
+    //     }
+    // }
+    generateTodos();
+}
+
+function removeCategory(ID) {
+    storeCategories(removeObjectWithID(fetchCategories(), ID));
+    // let storedCategoryList = fetchTodos();
+    // for (let i = 0; i < storedCategoryList.length; i++) {
+    //     if (storedCategoryList[i].id === ID) {
+    //         storedCategoryList.splice(i, 1);
+    //         storeTodos(storedCategoryList);
+    //         generateTodos();
+    //     }
+    // }
+    generateCategories();
+    manageCategories();
+}
+
+function removeObjectWithID(list,ID) {
+    for (let i = 0; i < list.length; i++) {
+        if (list[i].id === ID) {
+            list.splice(i, 1);
+            return list;
         }
     }
 }
@@ -129,13 +153,12 @@ function heart(ID) {
     generateTodos();
 }
 
-function generateID() {
-    let storedTodoList = fetchTodos();
+function generateID(list) {
     let newID = Math.random() * Math.pow(10, 17);
-    if(!storedTodoList) return newID;
-    while (storedTodoList.find(({id}) => id === newID)) newID = Math.random() * Math.pow(10, 17);
+    if(!list) return newID;
+    while (list.find(({id}) => id === newID)) newID = Math.random() * Math.pow(10, 17);
     return newID;
-    /* try {while (storedTodoList.find(({id}) => id === newID)) newID = Math.random() * Math.pow(10, 17); 
+    /* try {while (storedTodoList.find(({id}) => id === newID)) newID = Math.random() * Math.pow(10, 17);
     return newID;
 }
 catch {
@@ -144,7 +167,6 @@ catch {
 }
 
 function listener(e) {
-    console.log(e);
     if (e.key == 'Escape') {
     document.removeEventListener('keydown', listener);
     document.getElementById('manage-categories-container').remove();
@@ -156,18 +178,26 @@ function listener(e) {
     }
 }
 
-function manageCategory() {
-    let createCategoryContainer = document.createElement('div');
-    createCategoryContainer.on
-    createCategoryContainer.id = 'manage-categories-container';
+function manageCategories() {
+    if (document.getElementById('manage-categories-container')) document.getElementById('manage-categories-container').remove();
+
+    let storedCategories = fetchCategories();
+    let categoryContainer = document.createElement('div');
+    categoryContainer.id = 'manage-categories-container';
 
     document.addEventListener('keydown', listener);
 
-    // for (const category in categories) {
-    //     let newCategory = document.createElement('option');
-    //     newCategory.insertBefore(newCategory, document.querySelector('#todo-category option:last-child'));
-
-    // }
+    for (const category of storedCategories) {
+        let categoryDiv = document.createElement('div');
+        categoryDiv.classList.add('manage-this-category');
+        let categoryParagraph = document.createElement('p');
+        categoryParagraph.innerHTML = category.name;
+        let removeCategoryIMG = document.createElement('img');
+        removeCategoryIMG.classList.add('remove-category-img');
+        removeCategoryIMG.setAttribute('onclick', `removeCategory(${category.id})`);
+        categoryDiv.append(categoryParagraph, removeCategoryIMG);
+        categoryContainer.append(categoryDiv);
+    }
 
     let inputField = document.createElement('input');
     inputField.style.width = '250px';
@@ -180,7 +210,6 @@ function manageCategory() {
     addBtn.id = 'add-category-btn';
     addBtn.innerHTML = 'Add Category';
     addBtn.setAttribute('onclick', 'addNewCategory()');
-    // addBtn.onclick = 'addNewCategory()';
 
     let pageContainer = document.getElementById('page-container');
 
@@ -189,40 +218,46 @@ function manageCategory() {
         blurElements[i].classList.add('blur');
     }
 
-
-    pageContainer.append(createCategoryContainer);
-    createCategoryContainer.append(inputField, addBtn);
+    pageContainer.append(categoryContainer);
+    categoryContainer.append(inputField, addBtn);
 }
 
 function addNewCategory() {
     let storedCategories = fetchCategories();
-    let newCategory = document.getElementById('input-field-new-category');
-
-    if(storeCategories) {
+    
+    let newCategory = {
+        name:document.getElementById('input-field-new-category').value,
+        id:generateID(fetchCategories())
+    }
+    
+    if(!storedCategories) {
         storedCategories = [];
-        storedCategories.push(newCategory.value)
+        storedCategories.push(newCategory);
     }
-    else storedCategories.push(newCategory.value)
-
+    else storedCategories.push(newCategory);
+    
     storeCategories(storedCategories);
-
-    let unBlurElements = document.querySelectorAll('#page-container > *:not(#manage-categories-container)');
-    for (let i = 0; i < unBlurElements.length; i++) {
-        unBlurElements[i].classList.remove('blur');
-    }
-    document.getElementById('manage-categories-container').remove();
+    
+    manageCategories();
 }
 
 function generateCategories() {
     let storedCategories = fetchCategories();
-    if (!storedCategories) return;
+    if (!storedCategories) {
+        storedCategories = [];
+        storedCategories.push({name:'personlig',id:generateID(fetchCategories())},{name:'jobb',id:generateID(fetchCategories())});
+    }
+    storeCategories(storedCategories);
+    let todoCategory = document.getElementById('todo-category');
+    todoCategory.innerHTML = '<option onclick="manageCategories()">Ny Kategori</option>';
     for (let i = 0; i < storedCategories.length; i++) {
         let newCategory = document.createElement('option');
         newCategory.classList.add('category');
-        newCategory.value = storedCategories[i];
-        newCategory.innerHTML = storedCategories[i];
-        document.getElementById('todo-category').insertBefore(newCategory, document.querySelector('#todo-category option:last-child'));
+        newCategory.value = storedCategories[i].name;
+        newCategory.innerHTML = storedCategories[i].name;
+        todoCategory.insertBefore(newCategory, document.querySelector('#todo-category option:last-child'));
     }
+    document.getElementById('todo-category').value = document.getElementById('todo-category').firstElementChild.value;
 }
 
 function fetchTodos() {
