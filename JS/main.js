@@ -70,7 +70,7 @@ function generateTodos() {
 
         let removeContainer = document.createElement('div');
         removeContainer.classList.add('remove-btn')
-        removeContainer.setAttribute("onclick", `removeTodo(${storedTodoList,storedTodoList[i].id})`);
+        removeContainer.setAttribute("onclick", `removeTodo(${storedTodoList[i].id})`);
         let removeButton = document.createElement('img');
         removeButton.setAttribute("class", `removeButton`);
 
@@ -111,40 +111,6 @@ function createTodoSection(category, TodoCard) {
     document.getElementById(`${category}-todos`).append(TodoCard);
 }
 
-function removeTodo(ID) {
-    storeTodos(removeObjectWithID(fetchTodos(), ID));
-    // for (let i = 0; i < storedTodoList.length; i++) {
-    //     if (storedTodoList[i].id === ID) {
-    //         storedTodoList.splice(i, 1);
-    //         storeTodos(storedTodoList);
-    //     }
-    // }
-    generateTodos();
-}
-
-function removeCategory(ID) {
-    storeCategories(removeObjectWithID(fetchCategories(), ID));
-    // let storedCategoryList = fetchTodos();
-    // for (let i = 0; i < storedCategoryList.length; i++) {
-    //     if (storedCategoryList[i].id === ID) {
-    //         storedCategoryList.splice(i, 1);
-    //         storeTodos(storedCategoryList);
-    //         generateTodos();
-    //     }
-    // }
-    generateCategories();
-    manageCategories();
-}
-
-function removeObjectWithID(list,ID) {
-    for (let i = 0; i < list.length; i++) {
-        if (list[i].id === ID) {
-            list.splice(i, 1);
-            return list;
-        }
-    }
-}
-
 function heart(ID) {
     let storedTodoList = fetchTodos();
     let todo = storedTodoList.find(({id}) => id === ID);
@@ -166,58 +132,64 @@ catch {
 } */
 }
 
-function listener(e) {
-    if (e.key == 'Escape') {
-    document.removeEventListener('keydown', listener);
-    document.getElementById('manage-categories-container').remove();
-    let blurElements = document.querySelectorAll('#page-container > *:not(#manage-categories-container)');
-    for (let i = 0; i < blurElements.length; i++) {
-        blurElements[i].classList.remove('blur');
-    }
-    generateCategories();
-    }
-}
-
 function manageCategories() {
     if (document.getElementById('manage-categories-container')) document.getElementById('manage-categories-container').remove();
-
+    
     let storedCategories = fetchCategories();
     let categoryContainer = document.createElement('div');
     categoryContainer.id = 'manage-categories-container';
-
+    
     document.addEventListener('keydown', listener);
-
+    document.addEventListener('click', listener);
+    
     for (const category of storedCategories) {
         let categoryDiv = document.createElement('div');
         categoryDiv.classList.add('manage-this-category');
         let categoryParagraph = document.createElement('p');
         categoryParagraph.innerHTML = category.name;
-        let removeCategoryIMG = document.createElement('img');
-        removeCategoryIMG.classList.add('remove-category-img');
-        removeCategoryIMG.setAttribute('onclick', `removeCategory(${category.id})`);
-        categoryDiv.append(categoryParagraph, removeCategoryIMG);
+        
+        
+        let removeContainer = document.createElement('div');
+        // removeContainer.classList.add('remove-btn')
+        removeContainer.setAttribute("onclick", `removeCategory(${category.id})`);
+        let removeButton = document.createElement('img');
+        removeButton.setAttribute("class", `removeButton`);
+        
+        removeButton.setAttribute("src", "./assets/images/bin.png");
+        
+        let binLid = document.createElement('a');
+        binLid.setAttribute("class", "binLid");
+        
+        removeContainer.append(binLid, removeButton);
+        
+        
+        // let removeCategoryIMG = document.createElement('img');
+        // removeCategoryIMG.classList.add('remove-category-img');
+        // removeCategoryIMG.src = './assets/images/add.png';
+        // removeCategoryIMG.setAttribute('onclick', `removeCategory(${category.id})`);
+        categoryDiv.append(categoryParagraph, removeContainer);
         categoryContainer.append(categoryDiv);
     }
-
+    
     let inputField = document.createElement('input');
     inputField.style.width = '250px';
     inputField.id = 'input-field-new-category';
     inputField.classList.add('input-field');
     inputField.placeholder = 'New Category';
-
+    
     let addBtn = document.createElement('button');
     addBtn.classList.add('btns');
     addBtn.id = 'add-category-btn';
     addBtn.innerHTML = 'Add Category';
     addBtn.setAttribute('onclick', 'addNewCategory()');
-
+    
     let pageContainer = document.getElementById('page-container');
-
+    
     let blurElements = document.querySelectorAll('#page-container > *:not(#manage-categories-container)');
     for (let i = 0; i < blurElements.length; i++) {
         blurElements[i].classList.add('blur');
     }
-
+    
     pageContainer.append(categoryContainer);
     categoryContainer.append(inputField, addBtn);
 }
@@ -260,7 +232,45 @@ function generateCategories() {
     document.getElementById('todo-category').value = document.getElementById('todo-category').firstElementChild.value;
 }
 
+function removeTodo(ID) {
+    storeTodos(removeObjectWithID(fetchTodos(), ID));
+    // for (let i = 0; i < storedTodoList.length; i++) {
+    //     if (storedTodoList[i].id === ID) {
+    //         storedTodoList.splice(i, 1);
+    //         storeTodos(storedTodoList);
+    //     }
+    // }
+    generateTodos();
+}
+
+function removeCategory(ID) {
+    storeCategories(removeObjectWithID(fetchCategories(), ID));
+    // let storedCategoryList = fetchTodos();
+    // for (let i = 0; i < storedCategoryList.length; i++) {
+    //     if (storedCategoryList[i].id === ID) {
+    //         storedCategoryList.splice(i, 1);
+    //         storeTodos(storedCategoryList);
+    //         generateTodos();
+    //     }
+    // }
+    generateCategories();
+    manageCategories();
+}
+
+function removeObjectWithID(list,ID) {
+    for (let i = 0; i < list.length; i++) {
+        if (list[i].id === ID) {
+            list.splice(i, 1);
+            return list;
+        }
+    }
+}
+
 function fetchTodos() {
+    if (localStorage.getItem('todoList') === 'undefined') {
+        storeTodos([]);
+        console.log('Todos was undefined, they have been reset.');
+    }
     return JSON.parse(localStorage.getItem('todoList'));
 }
 
@@ -269,11 +279,50 @@ function storeTodos(todos) {
 }
 
 function fetchCategories() {
+    if (localStorage.getItem('todoCategories') === 'undefined') {
+        storeCategories([]);
+        console.log('Categories was undefined, they have been reset.');
+    }
     return JSON.parse(localStorage.getItem('todoCategories'));
 }
 
 function storeCategories(categories) {
     localStorage.setItem('todoCategories', JSON.stringify(categories));
+}
+
+function listener(e) {
+    let manageCategoriesContainer = document.getElementById('manage-categories-container');
+    let elements = document.querySelectorAll('#manage-categories-container *')
+    let option = document.getElementById('todo-category');
+    let boolean = false;
+
+    for (let i = 0; i < elements.length; i++) {
+        if (elements[i] == e.target || e.target == manageCategoriesContainer || e.target == option.lastElementChild) {
+            boolean = true;
+            break;
+        }
+    }
+
+    if (e.type == 'click' && (boolean == false)) {
+        document.removeEventListener('keydown', listener);
+        document.removeEventListener('click', listener);
+        document.getElementById('manage-categories-container').remove();
+        let blurElements = document.querySelectorAll('#page-container > *:not(#manage-categories-container)');
+        for (let i = 0; i < blurElements.length; i++) {
+            blurElements[i].classList.remove('blur');
+        }
+        generateCategories();
+    }
+    if (e.key == 'Escape') {
+        document.removeEventListener('keydown', listener);
+        document.removeEventListener('click', listener);
+        document.getElementById('manage-categories-container').remove();
+        let blurElements = document.querySelectorAll('#page-container > *:not(#manage-categories-container)');
+        for (let i = 0; i < blurElements.length; i++) {
+            blurElements[i].classList.remove('blur');
+        }
+        generateCategories();
+    }
 }
 
 const randomTodoArray = [
