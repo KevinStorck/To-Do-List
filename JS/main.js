@@ -48,6 +48,7 @@ function generateTodos() {
   for (let i = 0; i < storedTodoList.length; i++) {
     let TodoCard = document.createElement("div");
     TodoCard.setAttribute("class", "todo-item");
+    TodoCard.setAttribute("draggable", "true");
     let todoCardHeader = document.createElement("div");
     todoCardHeader.classList.add("card-header");
     let todoCardBody = document.createElement("div");
