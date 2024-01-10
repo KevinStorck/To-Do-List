@@ -39,6 +39,21 @@ function saveTodoItem() {
   generateTodos();
 }
 
+let offsetX, offsetY;
+
+document.addEventListener("mouseup", () => {
+  document.removeEventListener("mousemove", move);
+});
+
+const move = (e) => {
+  document.querySelector("#personlig-todos div:first-child").style.left = `${
+    e.clientX - offsetX
+  }px`;
+  document.querySelector("#personlig-todos div:first-child").style.top = `${
+    e.clientY - offsetY
+  }px`;
+};
+
 function generateTodos() {
   generateCategories();
   let storedTodoList = fetchTodos();
@@ -48,11 +63,17 @@ function generateTodos() {
   for (let i = 0; i < storedTodoList.length; i++) {
     let TodoCard = document.createElement("div");
     TodoCard.setAttribute("class", "todo-item");
-    TodoCard.setAttribute("draggable", "true");
+    // TodoCard.setAttribute("draggable", "true");
     let todoCardHeader = document.createElement("div");
     todoCardHeader.classList.add("card-header");
     let todoCardBody = document.createElement("div");
     todoCardBody.classList.add("card-body");
+
+    TodoCard.addEventListener("mousedown", (e) => {
+      offsetX = e.clientX - TodoCard.offsetLeft;
+      offsetY = e.clientY - TodoCard.offsetTop;
+      document.addEventListener("mousemove", move);
+    });
 
     let todoHeader = document.createElement("h3");
     todoHeader.innerHTML = storedTodoList[i].header;
