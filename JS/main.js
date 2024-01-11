@@ -8,11 +8,26 @@ function saveTodoItem() {
 
   let storedTodos = fetchTodos();
   let todo;
+
+  let posX = 0;
+  let posY = 0;
+  if (storedTodos) {
+    let count;
+    for (const todo of storedTodos) {
+      if (todo.category == inputCategory) {
+        posX += 250;
+        count++;
+      }
+      if (count > 5) posY += 200;
+    }
+  }
+
   if (!inputHeader && !inputBody) {
     todo = createRandomTodo();
     todo = {
       ...todo,
       id: generateID(fetchTodos()),
+      position: [posX, posY],
     };
   } else
     todo = {
@@ -23,6 +38,7 @@ function saveTodoItem() {
       id: generateID(fetchTodos()),
       done: false,
       heart: false,
+      position: [posX, posY],
     };
   let updatedTodoList = [];
 
@@ -39,20 +55,72 @@ function saveTodoItem() {
   generateTodos();
 }
 
-let offsetX, offsetY;
+// document.addEventListener("mouseup", () => {
+//   document.removeEventListener("mousemove", move);
+// });
 
-document.addEventListener("mouseup", () => {
-  document.removeEventListener("mousemove", move);
-});
+// let offsetX, offsetY;
+// const move = (e) => {
+//   console.log(e);
+//   e.target.style.left = `${e.clientX - offsetX}px`;
+//   e.target.style.top = `${e.clientY - offsetY}px`;
+// };
 
-const move = (e) => {
-  document.querySelector("#personlig-todos div:first-child").style.left = `${
-    e.clientX - offsetX
-  }px`;
-  document.querySelector("#personlig-todos div:first-child").style.top = `${
-    e.clientY - offsetY
-  }px`;
-};
+// const moveTodo = (element, id, position, event) => {
+//   console.log(element);
+//   console.log(id);
+//   console.log(position);
+//   console.log(event);
+//   element.style.left = `${event.clientX + position[0]}`;
+//   document.addEventListener("mouseeup", testMove(element, event));
+// };
+
+// const testMove = (element, event) => {
+//   element.style.left = `${event.clientX}`;
+//   document.removeEventListener("mouseup", testMove);
+// };
+
+function moveTodo(element, ID) {
+  let pos1 = 0,
+    pos2 = 0,
+    pos3 = 0,
+    pos4 = 0;
+  let todoPositionX, todoPositionY;
+  element.onmousedown = dragMouseDown;
+
+  function dragMouseDown(e) {
+    // e = e || window.event;
+    e.preventDefault();
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    console.log(e);
+    // e = e || window.event;
+    e.preventDefault();
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    todoPositionX = element.offsetLeft - pos1;
+    todoPositionY = element.offsetTop - pos2;
+    element.style.left = todoPositionX + "px";
+    element.style.top = todoPositionY + "px";
+  }
+
+  function closeDragElement() {
+    let storedTodoList = fetchTodos();
+    let todo = storedTodoList.find(({ id }) => id === ID);
+    todo.position[0] = todoPositionX;
+    todo.position[1] = todoPositionY;
+    document.onmouseup = null;
+    document.onmousemove = null;
+    storeTodos(storedTodoList);
+  }
+}
 
 function generateTodos() {
   generateCategories();
@@ -61,19 +129,35 @@ function generateTodos() {
 
   if (!storedTodoList) return;
   for (let i = 0; i < storedTodoList.length; i++) {
-    let TodoCard = document.createElement("div");
-    TodoCard.setAttribute("class", "todo-item");
-    // TodoCard.setAttribute("draggable", "true");
+    let todoCard = document.createElement("div");
+    todoCard.setAttribute("class", "todo-item");
+    todoCard.style.left = `${storedTodoList[i].position[0]}px`;
+    todoCard.style.top = `${storedTodoList[i].position[1]}px`;
+    // todoCard.setAttribute("draggable", "true");
     let todoCardHeader = document.createElement("div");
     todoCardHeader.classList.add("card-header");
     let todoCardBody = document.createElement("div");
     todoCardBody.classList.add("card-body");
 
-    TodoCard.addEventListener("mousedown", (e) => {
-      offsetX = e.clientX - TodoCard.offsetLeft;
-      offsetY = e.clientY - TodoCard.offsetTop;
-      document.addEventListener("mousemove", move);
-    });
+    // todoCard.addEventListener("mousedown", (e) => {
+    //   console.log(e.clientX);
+    //   console.log(e.clientY);
+    //   console.log(todoCard.offsetLeft);
+    //   console.log(todoCard.offsetTop);
+    //   offsetX = e.clientX - todoCard.offsetLeft;
+    //   offsetY = e.clientY - todoCard.offsetTop;
+    //   document.addEventListener(
+    //     "mousemove",
+    //     moveTodo(
+    //       todoCard,
+    //       storedTodoList[i].id,
+    //       [storedTodoList[i].position[0], storedTodoList[i].position[1]],
+    //       event
+    //     )
+    //   );
+    // });
+
+    moveTodo(todoCard, storedTodoList[i].id);
 
     let todoHeader = document.createElement("h3");
     todoHeader.innerHTML = storedTodoList[i].header;
@@ -113,13 +197,13 @@ function generateTodos() {
 
     todoCardHeader.append(todoHeader, heart, todoDate);
     todoCardBody.append(todoBody, removeContainer);
-    TodoCard.append(todoCardHeader, todoCardBody);
+    todoCard.append(todoCardHeader, todoCardBody);
 
-    createTodoSection(storedTodoList[i].category, TodoCard);
+    createTodoSection(storedTodoList[i].category, todoCard);
   }
 }
 
-function createTodoSection(category, TodoCard) {
+function createTodoSection(category, todoCard) {
   if (!document.getElementById(category)) {
     let newSection = document.createElement("div");
     newSection.classList.add("category-container");
@@ -132,7 +216,7 @@ function createTodoSection(category, TodoCard) {
     document.getElementById("todo-section").append(newSection);
     newSection.append(newHeader, todosContainer);
   }
-  document.getElementById(`${category}-todos`).append(TodoCard);
+  document.getElementById(`${category}-todos`).append(todoCard);
 }
 
 function heart(ID) {
