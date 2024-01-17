@@ -163,6 +163,9 @@ h5 {
 #todo-section {
   display: flex;
   flex-wrap: wrap;
+  height: 800px;
+  background-image: url("../assets/images/Cork-background.jpg");
+  margin-top: 30px;
 }
 
 #todo-category,
@@ -198,9 +201,9 @@ h5 {
   justify-content: space-evenly;
   max-width: 100%;
   gap: 15px;
-  background-image: url("../assets/images/Cork-background.jpg");
-  border-radius: 5px;
-  box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.685);
+  /* background-image: url("../assets/images/Cork-background.jpg"); */
+  /* border-radius: 5px; */
+  /* box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.685); */
   align-items: flex-start;
 }
 

@@ -55,73 +55,6 @@ function saveTodoItem() {
   generateTodos();
 }
 
-// document.addEventListener("mouseup", () => {
-//   document.removeEventListener("mousemove", move);
-// });
-
-// let offsetX, offsetY;
-// const move = (e) => {
-//   console.log(e);
-//   e.target.style.left = `${e.clientX - offsetX}px`;
-//   e.target.style.top = `${e.clientY - offsetY}px`;
-// };
-
-// const moveTodo = (element, id, position, event) => {
-//   console.log(element);
-//   console.log(id);
-//   console.log(position);
-//   console.log(event);
-//   element.style.left = `${event.clientX + position[0]}`;
-//   document.addEventListener("mouseeup", testMove(element, event));
-// };
-
-// const testMove = (element, event) => {
-//   element.style.left = `${event.clientX}`;
-//   document.removeEventListener("mouseup", testMove);
-// };
-
-function moveTodo(element, ID) {
-  let pos1 = 0,
-    pos2 = 0,
-    pos3 = 0,
-    pos4 = 0;
-  let todoPositionX, todoPositionY;
-  element.onmousedown = dragMouseDown;
-
-  function dragMouseDown(e) {
-    // e = e || window.event;
-    e.preventDefault();
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    document.onmouseup = closeDragElement;
-    document.onmousemove = elementDrag;
-  }
-
-  function elementDrag(e) {
-    console.log(e);
-    // e = e || window.event;
-    e.preventDefault();
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-    todoPositionX = element.offsetLeft - pos1;
-    todoPositionY = element.offsetTop - pos2;
-    element.style.left = todoPositionX + "px";
-    element.style.top = todoPositionY + "px";
-  }
-
-  function closeDragElement() {
-    let storedTodoList = fetchTodos();
-    let todo = storedTodoList.find(({ id }) => id === ID);
-    todo.position[0] = todoPositionX;
-    todo.position[1] = todoPositionY;
-    document.onmouseup = null;
-    document.onmousemove = null;
-    storeTodos(storedTodoList);
-  }
-}
-
 function generateTodos() {
   generateCategories();
   let storedTodoList = fetchTodos();
@@ -133,29 +66,10 @@ function generateTodos() {
     todoCard.setAttribute("class", "todo-item");
     todoCard.style.left = `${storedTodoList[i].position[0]}px`;
     todoCard.style.top = `${storedTodoList[i].position[1]}px`;
-    // todoCard.setAttribute("draggable", "true");
     let todoCardHeader = document.createElement("div");
     todoCardHeader.classList.add("card-header");
     let todoCardBody = document.createElement("div");
     todoCardBody.classList.add("card-body");
-
-    // todoCard.addEventListener("mousedown", (e) => {
-    //   console.log(e.clientX);
-    //   console.log(e.clientY);
-    //   console.log(todoCard.offsetLeft);
-    //   console.log(todoCard.offsetTop);
-    //   offsetX = e.clientX - todoCard.offsetLeft;
-    //   offsetY = e.clientY - todoCard.offsetTop;
-    //   document.addEventListener(
-    //     "mousemove",
-    //     moveTodo(
-    //       todoCard,
-    //       storedTodoList[i].id,
-    //       [storedTodoList[i].position[0], storedTodoList[i].position[1]],
-    //       event
-    //     )
-    //   );
-    // });
 
     moveTodo(todoCard, storedTodoList[i].id);
 
@@ -220,9 +134,13 @@ function createTodoSection(category, todoCard) {
 }
 
 function heart(ID) {
+  console.log("Heart Function");
   let storedTodoList = fetchTodos();
   let todo = storedTodoList.find(({ id }) => id === ID);
+  // console.log(todo.position);
   todo.heart = !todo.heart;
+  // console.log(todo.position);
+  // console.log(todo);
   storeTodos(storedTodoList);
   generateTodos();
 }
@@ -382,6 +300,10 @@ function removeCategory(ID) {
   manageCategories();
 }
 
+function sortTodos(category) {
+  let storedTodoList = fetchTodos();
+}
+
 function removeObjectWithID(list, ID) {
   for (let i = 0; i < list.length; i++) {
     if (list[i].id === ID) {
@@ -391,15 +313,58 @@ function removeObjectWithID(list, ID) {
   }
 }
 
+function moveTodo(element, ID) {
+  console.log("movetodo");
+  let pos1 = 0,
+    pos2 = 0,
+    pos3 = 0,
+    pos4 = 0;
+  let todoPositionX, todoPositionY;
+  element.onmousedown = todoOnMouseDown;
+
+  function todoOnMouseDown(e) {
+    e.preventDefault();
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = todoOnMouseUp;
+    document.onmousemove = dragTodo;
+  }
+
+  function dragTodo(e) {
+    e.preventDefault();
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    todoPositionX = element.offsetLeft - pos1;
+    todoPositionY = element.offsetTop - pos2;
+    element.style.left = `${todoPositionX}px`;
+    element.style.top = `${todoPositionY}px`;
+  }
+
+  function todoOnMouseUp() {
+    let storedTodoList = fetchTodos();
+    let todo = storedTodoList.find(({ id }) => id === ID);
+    if (todoPositionX) todo.position[0] = todoPositionX;
+    if (todoPositionY) todo.position[1] = todoPositionY;
+    document.onmouseup = null;
+    document.onmousemove = null;
+    storeTodos(storedTodoList);
+  }
+}
+
 function fetchTodos() {
   if (localStorage.getItem("todoList") === "undefined") {
     storeTodos([]);
     console.log("Todos were undefined, they have been reset.");
   }
+  console.log("#############################################");
+  console.log("fetching" + localStorage.getItem("todoList"));
   return JSON.parse(localStorage.getItem("todoList"));
 }
 
 function storeTodos(todos) {
+  console.log("Storing" + localStorage.getItem("todoList"));
   localStorage.setItem("todoList", JSON.stringify(todos));
 }
 
