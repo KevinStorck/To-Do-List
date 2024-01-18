@@ -9,21 +9,29 @@ function saveTodoItem() {
   let storedTodos = fetchTodos();
   let todo;
 
+  console.log(inputCategory);
+  console.log("#####################################");
+
+  if (!inputHeader && !inputBody) todo = createRandomTodo();
+  console.log(todo);
+
   let posX = 0;
   let posY = 0;
   if (storedTodos) {
-    let count;
+    let count = 1;
+    let category = inputCategory;
+    if (!inputHeader && !inputBody) category = todo.category;
     for (const todo of storedTodos) {
-      if (todo.category == inputCategory) {
-        posX += 250;
+      if (todo.category == category) {
+        console.log(todo.category);
+        posX = (count % 4) * 225;
+        posY = Math.floor(count / 4) * 200;
         count++;
       }
-      if (count > 5) posY += 200;
     }
   }
 
   if (!inputHeader && !inputBody) {
-    todo = createRandomTodo();
     todo = {
       ...todo,
       id: generateID(fetchTodos()),
@@ -134,13 +142,9 @@ function createTodoSection(category, todoCard) {
 }
 
 function heart(ID) {
-  console.log("Heart Function");
   let storedTodoList = fetchTodos();
   let todo = storedTodoList.find(({ id }) => id === ID);
-  // console.log(todo.position);
   todo.heart = !todo.heart;
-  // console.log(todo.position);
-  // console.log(todo);
   storeTodos(storedTodoList);
   generateTodos();
 }
@@ -162,11 +166,9 @@ catch {
 function manageCategories() {
   console.log("see if the thing is up");
   if (document.getElementById("manage-categories-container")) {
-    console.log("remove thing");
     document.getElementById("manage-categories-container").remove();
   }
 
-  console.log("managecategories is run");
   let storedCategories = fetchCategories();
   let categoryContainer = document.createElement("div");
   categoryContainer.id = "manage-categories-container";
@@ -224,7 +226,6 @@ function manageCategories() {
 
   pageContainer.append(categoryContainer);
   categoryContainer.append(inputField, addBtn);
-  console.log("manage categories is completed");
 }
 
 function addNewCategory() {
@@ -274,29 +275,12 @@ function generateCategories() {
 
 function removeTodo(ID) {
   storeTodos(removeObjectWithID(fetchTodos(), ID));
-  // for (let i = 0; i < storedTodoList.length; i++) {
-  //     if (storedTodoList[i].id === ID) {
-  //         storedTodoList.splice(i, 1);
-  //         storeTodos(storedTodoList);
-  //     }
-  // }
   generateTodos();
 }
 
 function removeCategory(ID) {
   storeCategories(removeObjectWithID(fetchCategories(), ID));
-  // let storedCategoryList = fetchTodos();
-  // for (let i = 0; i < storedCategoryList.length; i++) {
-  //     if (storedCategoryList[i].id === ID) {
-  //         storedCategoryList.splice(i, 1);
-  //         storeTodos(storedCategoryList);
-  //         generateTodos();
-  //     }
-  // }
-  console.log("generatecats");
   generateCategories();
-  //   test();
-  console.log("managecats");
   manageCategories();
 }
 
@@ -314,7 +298,6 @@ function removeObjectWithID(list, ID) {
 }
 
 function moveTodo(element, ID) {
-  console.log("movetodo");
   let pos1 = 0,
     pos2 = 0,
     pos3 = 0,
@@ -358,13 +341,10 @@ function fetchTodos() {
     storeTodos([]);
     console.log("Todos were undefined, they have been reset.");
   }
-  console.log("#############################################");
-  console.log("fetching" + localStorage.getItem("todoList"));
   return JSON.parse(localStorage.getItem("todoList"));
 }
 
 function storeTodos(todos) {
-  console.log("Storing" + localStorage.getItem("todoList"));
   localStorage.setItem("todoList", JSON.stringify(todos));
 }
 
@@ -388,12 +368,7 @@ function listener(e) {
   let option = document.getElementById("todo-category");
   let boolean = false;
 
-  console.log(e.target);
-  console.log(e.target.tagName);
-  console.log("e.target");
-
   for (let i = 0; i < elements.length; i++) {
-    console.log(elements[i]);
     if (
       elements[i] == e.target ||
       e.target == manageCategoriesContainer ||
@@ -556,6 +531,7 @@ const randomTodoArray = [
 ];
 function createRandomTodo() {
   let index = Math.round(Math.random() * randomTodoArray.length);
+  console.log(index);
   return randomTodoArray[index];
 }
 createRandomTodo();

@@ -166,6 +166,7 @@ h5 {
   height: 800px;
   background-image: url("../assets/images/Cork-background.jpg");
   margin-top: 30px;
+  border-radius: 10px;
 }
 
 #todo-category,
